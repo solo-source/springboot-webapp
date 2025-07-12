@@ -1,11 +1,23 @@
-package com.stackit.model;
-
-import com.stackit.enums.NotificationType;
-import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
+package com.stackit.webapp.model;
 
 import java.time.OffsetDateTime;
 import java.util.Objects;
+
+import org.hibernate.annotations.CreationTimestamp;
+
+import com.stackit.webapp.enums.NotificationType;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "notifications")

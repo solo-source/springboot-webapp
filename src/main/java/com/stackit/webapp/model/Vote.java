@@ -1,16 +1,30 @@
-package com.stackit.model;
-
-import com.stackit.enums.VoteType;
-import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
+package com.stackit.webapp.model;
 
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
+import org.hibernate.annotations.CreationTimestamp;
+
+import com.stackit.webapp.enums.VoteType;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+
 @Entity
-@Table(name = "votes", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"user_id", "answer_id"})
-})
+@Table(name="votes",
+uniqueConstraints=@UniqueConstraint(
+  name="uk_user_answer_vote",
+  columnNames={"user_id","answer_id"}))
 public class Vote {
 
     @Id
@@ -21,8 +35,8 @@ public class Vote {
     @JoinColumn(name = "answer_id", nullable = false)
     private Answer answer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = true)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Enumerated(EnumType.STRING)

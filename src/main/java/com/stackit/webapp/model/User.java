@@ -1,15 +1,35 @@
-package com.stackit.model;
-
-import com.stackit.enums.UserRole;
-import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+package com.stackit.webapp.model;
 
 import java.time.OffsetDateTime;
 import java.util.Objects; // Required for equals/hashCode
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
+
+import com.stackit.webapp.enums.UserRole;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+
 @Entity
-@Table(name = "users")
+@Table(name = "users",
+uniqueConstraints = {
+  @UniqueConstraint(name="uk_active_username",
+                    columnNames="username"),
+  @UniqueConstraint(name="uk_active_email",
+                    columnNames="email")
+})
+@SQLDelete(sql = "UPDATE users SET is_deleted = true, deleted_at = now() WHERE id = ?")
+@Where(clause = "is_deleted = false")
 public class User {
 
     @Id

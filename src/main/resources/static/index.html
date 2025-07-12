@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>StackIt Home</title>
+
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-…"
+    crossorigin="anonymous"
+  />
+
+  <!-- Bootstrap Icons (for the search icon etc) -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    rel="stylesheet"
+  />
+
+  <style>
+    body { background-color: #f8f9fa; }
+    .question-card { transition: box-shadow .2s; }
+    .question-card:hover { box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15); }
+    .tag-badge { margin-right: .25rem; }
+    .answers-badge {
+      font-size: .85rem;
+      background-color: #e9ecef;
+      color: #495057;
+      border-radius: .5rem;
+      padding: .2rem .6rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom mb-4">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="/">StackIt</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a href="/auth" class="btn btn-outline-primary">Log In / Sign Up</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <div class="container">
+    <!-- Toolbar: Ask + Filters + Search -->
+    <div class="row g-2 align-items-center mb-4">
+      <div class="col-auto">
+        <a href="/questions/ask" class="btn btn-primary">
+          <i class="bi bi-pencil-square"></i> Ask New Question
+        </a>
+      </div>
+      <div class="col-auto">
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-outline-secondary active">Newest</button>
+          <button type="button" class="btn btn-outline-secondary">Unanswered</button>
+          <button
+            type="button"
+            class="btn btn-outline-secondary dropdown-toggle"
+            data-bs-toggle="dropdown"
+          >More</button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Frequent</a></li>
+            <li><a class="dropdown-item" href="#">Votes</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col">
+        <form class="d-flex" action="/questions" method="get">
+          <input
+            class="form-control"
+            type="search"
+            name="q"
+            placeholder="Search questions…"
+            aria-label="Search"
+          />
+          <button class="btn btn-outline-secondary ms-2" type="submit">
+            <i class="bi bi-search"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Question list (Thymeleaf fragment or placeholder) -->
+    <div class="row gy-3">
+      <!-- Example static cards; replace with your th:each list in templates -->
+      <div class="col-12">
+        <div class="card question-card p-3">
+          <div class="d-flex justify-content-between">
+            <div>
+              <h5><a href="/questions/1" class="text-decoration-none">How to join 2 columns in SQL?</a></h5>
+              <div class="mb-2">
+                <span class="badge bg-secondary tag-badge">sql</span>
+                <span class="badge bg-secondary tag-badge">beginner</span>
+              </div>
+              <p class="text-muted mb-1">
+                As a beginner, I need to combine first name and last name into a single column…
+              </p>
+              <small class="text-muted">Asked by Alice on Jul 12, 2025</small>
+            </div>
+            <div class="text-end">
+              <span class="answers-badge">5 ans</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+        <div class="card question-card p-3">
+          <div class="d-flex justify-content-between">
+            <div>
+              <h5><a href="/questions/1" class="text-decoration-none">How to join 2 columns in SQL?</a></h5>
+              <div class="mb-2">
+                <span class="badge bg-secondary tag-badge">sql</span>
+                <span class="badge bg-secondary tag-badge">beginner</span>
+              </div>
+              <p class="text-muted mb-1">
+                As a beginner, I need to combine first name and last name into a single column…
+              </p>
+              <small class="text-muted">Asked by Alice on Jul 12, 2025</small>
+            </div>
+            <div class="text-end">
+              <span class="answers-badge">5 ans</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+        <div class="card question-card p-3">
+          <div class="d-flex justify-content-between">
+            <div>
+              <h5><a href="/questions/1" class="text-decoration-none">How to join 2 columns in SQL?</a></h5>
+              <div class="mb-2">
+                <span class="badge bg-secondary tag-badge">sql</span>
+                <span class="badge bg-secondary tag-badge">beginner</span>
+              </div>
+              <p class="text-muted mb-1">
+                As a beginner, I need to combine first name and last name into a single column…
+              </p>
+              <small class="text-muted">Asked by Alice on Jul 12, 2025</small>
+            </div>
+            <div class="text-end">
+              <span class="answers-badge">5 ans</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Repeat above .col-12 for each question, or use:
+        <div class="col-12" th:each="q : ${questions}">
+          …your Thymeleaf markup here…
+        </div>
+      -->
+    </div>
+
+    <!-- PAGINATION -->
+    <nav class="mt-4">
+      <ul class="pagination justify-content-center">
+        <li class="page-item disabled">
+          <a class="page-link" href="#" tabindex="-1">«</a>
+        </li>
+        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item"><a class="page-link" href="#">4</a></li>
+        <li class="page-item"><a class="page-link" href="#">5</a></li>
+        <li class="page-item">
+          <a class="page-link" href="#">»</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Bootstrap JS Bundle -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-…"
+    crossorigin="anonymous"
+  ></script>
+</body>
+</html>

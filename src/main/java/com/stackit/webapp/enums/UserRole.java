@@ -1,4 +1,4 @@
-package com.stackit.enums;
+package com.stackit.webapp.enums;
 
 public enum UserRole {
 	GUEST,

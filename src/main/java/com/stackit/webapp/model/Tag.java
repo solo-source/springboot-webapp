@@ -1,4 +1,4 @@
-package com.stackit.model;
+package com.stackit.webapp.model;
 
 import jakarta.persistence.*;
 import java.util.HashSet;
@@ -53,6 +53,15 @@ public class Tag {
     public void setQuestions(Set<Question> questions) {
         this.questions = questions;
     }
+    
+    public void addQuestion(Question q) {
+        questions.add(q);
+        q.getTags().add(this);
+      }
+      public void removeQuestion(Question q) {
+        questions.remove(q);
+        q.getTags().remove(this);
+      }
 
     // --- equals() and hashCode() ---
     @Override

@@ -1,16 +1,22 @@
-package com.stackit.repositories;
-
-import com.stackit.model.User;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+package com.stackit.webapp.repositories;
 
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.stackit.webapp.model.User;
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    // Method to find a user by username, excluding soft-deleted users
+    /** 
+     * Lookup by username, only non-deleted users. 
+     * Matches schema’s WHERE is_deleted = false.
+     */
     Optional<User> findByUsernameAndIsDeletedFalse(String username);
 
-    // Method to find a user by email, excluding soft-deleted users
+    /** 
+     * Lookup by email, only non-deleted users. 
+     */
     Optional<User> findByEmailAndIsDeletedFalse(String email);
 }

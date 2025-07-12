@@ -1,95 +1,130 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StackIt - Login / Register</title>
-    <link rel="stylesheet" th:href="@{/css/main.css}">
-    <link rel="stylesheet" th:href="@{/css/auth-styles.css}"> </head>
-<body>
-    <div class="auth-wrapper">
-        <div class="auth-container">
-            <div class="auth-tabs">
-                <button class="auth-tab-btn active" id="loginTab">Login</button>
-                <button class="auth-tab-btn" id="registerTab">Register</button>
-            </div>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Authenticate – StackIt</title>
+  <!-- Bootstrap CSS -->
+  <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
+    rel="stylesheet" 
+    integrity="sha384-…" 
+    crossorigin="anonymous">
+</head>
+<body class="bg-light">
+<nav class="navbar navbar-light bg-white border-bottom mb-4">
+  <div class="container">
+    <a class="navbar-brand" href="/">StackIt</a>
+  </div>
+</nav>
 
-            <div th:if="${loginError}" class="alert alert-danger">
-                Invalid username or password.
-            </div>
-            <div th:if="${logoutSuccess}" class="alert alert-info">
-                You have been logged out.
-            </div>
-            <div th:if="${registrationSuccess}" class="alert alert-success">
-                Registration successful! Please log in.
-            </div>
+<div class="container" style="max-width: 480px;">
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <!-- Tabs -->
+      <ul class="nav nav-tabs mb-3" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="login-tab" data-bs-toggle="tab" href="#login" role="tab">
+            Login
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="signup-tab" data-bs-toggle="tab" href="#signup" role="tab">
+            Sign Up
+          </a>
+        </li>
+      </ul>
 
-            <div id="loginFormSection" class="auth-form-section active">
-                <h2>Login</h2>
-                <form th:action="@{/authenticate}" method="post">
-                    <div class="form-group">
-                        <label for="username">Username:</label>
-                        <input type="text" id="username" name="username" class="form-control" required autofocus/>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password:</label>
-                        <input type="password" id="password" name="password" class="form-control" required/>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Login</button>
-                </form>
-            </div>
+      <!-- Success / error alerts -->
+      <div th:if="${registrationSuccess}" class="alert alert-success">
+        Registration successful! You can now log in.
+      </div>
+      <div th:if="${loginError}" class="alert alert-danger">
+        Invalid username or password.
+      </div>
 
-            <div id="registerFormSection" class="auth-form-section" style="display: none;">
-                <h2>Register</h2>
-                <form th:action="@{/register}" th:object="${registerDto}" method="post">
-                    <div class="form-group">
-                        <label for="regUsername">Username:</label>
-                        <input type="text" id="regUsername" th:field="*{username}" class="form-control" required/>
-                        <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger"></p>
-                    </div>
-                    <div class="form-group">
-                        <label for="regEmail">Email:</label>
-                        <input type="email" id="regEmail" th:field="*{email}" class="form-control" required/>
-                        <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></p>
-                    </div>
-                    <div class="form-group">
-                        <label for="regPassword">Password:</label>
-                        <input type="password" id="regPassword" th:field="*{password}" class="form-control" required/>
-                        <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></p>
-                    </div>
-                    <div class="form-group">
-                        <label for="regConfirmPassword">Confirm Password:</label>
-                        <input type="password" id="regConfirmPassword" th:field="*{confirmPassword}" class="form-control" required/>
-                        <p th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="text-danger"></p>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Register</button>
-                </form>
+      <!-- Tab panes -->
+      <div class="tab-content">
+        <!-- LOGIN TAB -->
+        <div class="tab-pane fade show active" id="login" role="tabpanel">
+          <form action="#" th:action="@{/login}" method="post" novalidate>
+            <div class="mb-3">
+              <label for="loginUsername" class="form-label">Username</label>
+              <input type="text" name="username" class="form-control" id="loginUsername" required>
             </div>
+            <div class="mb-3">
+              <label for="loginPassword" class="form-label">Password</label>
+              <input type="password" name="password" class="form-control" id="loginPassword" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Log In</button>
+          </form>
         </div>
+
+        <!-- SIGN UP TAB -->
+        <div class="tab-pane fade" id="signup" role="tabpanel">
+          <form 
+            th:object="${registerDto}" 
+            action="#" th:action="@{/register}" 
+            method="post" 
+            novalidate>
+            
+            <div class="mb-3">
+              <label class="form-label">Username</label>
+              <input 
+                type="text" 
+                th:field="*{username}" 
+                class="form-control" 
+                placeholder="Choose a username">
+              <div class="text-danger" th:if="${#fields.hasErrors('username')}"
+                   th:errors="*{username}">Username error</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input 
+                type="email" 
+                th:field="*{email}" 
+                class="form-control" 
+                placeholder="you@example.com">
+              <div class="text-danger" th:if="${#fields.hasErrors('email')}"
+                   th:errors="*{email}">Email error</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Password</label>
+              <input 
+                type="password" 
+                th:field="*{password}" 
+                class="form-control">
+              <div class="text-danger" th:if="${#fields.hasErrors('password')}"
+                   th:errors="*{password}">Password error</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Confirm Password</label>
+              <input 
+                type="password" 
+                th:field="*{confirmPassword}" 
+                class="form-control">
+              <div class="text-danger" th:if="${#fields.hasErrors('confirmPassword')}"
+                   th:errors="*{confirmPassword}">Confirmation error</div>
+            </div>
+
+            <button type="submit" class="btn btn-success w-100">
+              Sign Up
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
+  </div>
+</div>
 
-    <script th:src="@{/js/auth.js}"></script>
-    <script th:inline="javascript">
-        // This script block handles initial tab visibility based on URL parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        const isError = /*[[${loginError}]]*/ false; // Access Thymeleaf variable
-        const isRegistered = /*[[${registrationSuccess}]]*/ false; // Access Thymeleaf variable
-
-        const loginFormSection = document.getElementById('loginFormSection');
-        const registerFormSection = document.getElementById('registerFormSection');
-        const loginTab = document.getElementById('loginTab');
-        const registerTab = document.getElementById('registerTab');
-
-        if (isError || urlParams.has('logout')) {
-            // Stay on login tab if login error or logout
-            showTab('login');
-        } else if (isRegistered || (/*[[${#fields.hasAnyErrors()}]]*/ false)) { // If registration success or errors
-            // Show register tab if registration success or errors
-            showTab('register');
-        } else {
-            // Default to login tab
-            showTab('login');
-        }
-    </script>
+<!-- Bootstrap JS Bundle -->
+<script 
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" 
+  integrity="sha384-…" 
+  crossorigin="anonymous">
+</script>
 </body>
 </html>

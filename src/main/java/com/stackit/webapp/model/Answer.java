@@ -1,4 +1,4 @@
-package com.stackit.model;
+package com.stackit.webapp.model;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -10,22 +10,26 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "questions")
-public class Question {
+@Table(name = "answers")
+public class Answer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title", nullable = false, length = 500)
-    private String title;
-
     @Column(name = "description", nullable = false, columnDefinition = "TEXT")
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "question_id", nullable = false)
+    private Question question;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = true)
     private User user;
+
+    @Column(name = "accepted", nullable = false)
+    private Boolean accepted = false;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -35,26 +39,19 @@ public class Question {
     @Column(name = "updated_at", nullable = false)
     private OffsetDateTime updatedAt;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Answer> answers = new HashSet<>();
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "question_tags",
-        joinColumns = @JoinColumn(name = "question_id"),
-        inverseJoinColumns = @JoinColumn(name = "tag_id")
-    )
-    private Set<Tag> tags = new HashSet<>();
+    @OneToMany(mappedBy = "answer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Vote> votes = new HashSet<>();
 
     // --- Constructors ---
-    public Question() {
+    public Answer() {
     }
 
-    public Question(Long id, String title, String description, User user, OffsetDateTime createdAt, OffsetDateTime updatedAt) {
+    public Answer(Long id, String description, Question question, User user, Boolean accepted, OffsetDateTime createdAt, OffsetDateTime updatedAt) {
         this.id = id;
-        this.title = title;
         this.description = description;
+        this.question = question;
         this.user = user;
+        this.accepted = accepted;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -64,16 +61,20 @@ public class Question {
         return id;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
     public String getDescription() {
         return description;
     }
 
+    public Question getQuestion() {
+        return question;
+    }
+
     public User getUser() {
         return user;
+    }
+
+    public Boolean getAccepted() {
+        return accepted;
     }
 
     public OffsetDateTime getCreatedAt() {
@@ -84,12 +85,8 @@ public class Question {
         return updatedAt;
     }
 
-    public Set<Answer> getAnswers() {
-        return answers;
-    }
-
-    public Set<Tag> getTags() {
-        return tags;
+    public Set<Vote> getVotes() {
+        return votes;
     }
 
     // --- Setters ---
@@ -97,16 +94,20 @@ public class Question {
         this.id = id;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public void setDescription(String description) {
         this.description = description;
     }
 
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
+
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public void setAccepted(Boolean accepted) {
+        this.accepted = accepted;
     }
 
     public void setCreatedAt(OffsetDateTime createdAt) {
@@ -117,25 +118,8 @@ public class Question {
         this.updatedAt = updatedAt;
     }
 
-    public void setAnswers(Set<Answer> answers) {
-        this.answers = answers;
-    }
-
-    public void setTags(Set<Tag> tags) {
-        this.tags = tags;
-    }
-
-    // --- Helper methods for ManyToMany relationship ---
-    public void addTag(Tag tag) {
-        this.tags.add(tag);
-        // Ensure the inverse side is also updated
-        tag.getQuestions().add(this); // This method should now exist due to manual getter/setter in Tag
-    }
-
-    public void removeTag(Tag tag) {
-        this.tags.remove(tag);
-        // Ensure the inverse side is also updated
-        tag.getQuestions().remove(this); // This method should now exist due to manual getter/setter in Tag
+    public void setVotes(Set<Vote> votes) {
+        this.votes = votes;
     }
 
     // --- equals() and hashCode() ---
@@ -143,8 +127,8 @@ public class Question {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Question question = (Question) o;
-        return Objects.equals(id, question.id);
+        Answer answer = (Answer) o;
+        return Objects.equals(id, answer.id);
     }
 
     @Override
