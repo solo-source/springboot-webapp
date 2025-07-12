@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StackIt - Home</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand"><a th:href="@{/}">StackIt</a></div>
+        <div class="navbar-links">
+            <div sec:authorize="isAuthenticated()">
+                <span>Hello, <span sec:authentication="name"></span>!</span>
+                <form th:action="@{/logout}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-nav">Logout</button>
+                </form>
+            </div>
+            <div sec:authorize="!isAuthenticated()">
+                <a th:href="@{/auth}" class="btn btn-nav">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Welcome to StackIt!</h1>
+
+        <div sec:authorize="isAuthenticated()">
+            <p>Your roles: <span sec:authentication="authorities"></span></p>
+        </div>
+
+        <div sec:authorize="!isAuthenticated()">
+            <p>You are not logged in. Please login to ask questions and answer.</p>
+        </div>
+
+        <h2 class="mt-4">Questions (Publicly Accessible)</h2>
+        <p>This is where your paginated list of questions will go.</p>
+        <p>
+            <a th:href="@{/questions}" class="btn">View All Questions</a>
+        </p>
+
+        <div sec:authorize="hasRole('USER')">
+            <h2 class="mt-4">User Actions</h2>
+            <p>
+                <a th:href="@{/questions/new}" class="btn">Ask a New Question</a>
+            </p>
+        </div>
+        <div sec:authorize="hasRole('ADMIN')">
+            <h2 class="mt-4">Admin Actions</h2>
+            <p>This area is for admins only.</p>
+        </div>
+
+    </div>
+</body>
+</html>

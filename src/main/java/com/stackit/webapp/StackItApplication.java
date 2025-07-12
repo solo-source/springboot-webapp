@@ -9,5 +9,4 @@ public class StackItApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(StackItApplication.class, args);
 	}
-
 }
