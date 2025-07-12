@@ -126,5 +126,33 @@
   integrity="sha384-…" 
   crossorigin="anonymous">
 </script>
+
+<div
+  th:if="${registrationSuccess}"
+  class="registration-overlay d-flex align-items-center justify-content-center"
+>
+  <div class="card text-center p-4" style="max-width: 320px;">
+    <div class="card-body">
+      <h5 class="card-title">🎉 Success!</h5>
+      <p class="card-text">Registration completed successfully.</p>
+      <button
+        class="btn btn-primary"
+        onclick="document.querySelector('.registration-overlay').remove()"
+      >
+        Continue to Login
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .registration-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 40%; height: 45%;
+    background: rgba(0,0,0,0.5);
+    z-index: 2000;
+  }
+</style>
 </body>
 </html>

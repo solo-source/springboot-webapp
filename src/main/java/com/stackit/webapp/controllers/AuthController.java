@@ -26,14 +26,6 @@ public class AuthController {
         this.userRepository = userRepository;
     }
 
-    /** 
-     * Show unified Login / Sign‑Up page.
-     * 
-     * Model attributes:
-     *   - registerDto : backing bean for sign‑up form
-     *   - loginError  : true if a previous login attempt failed
-     *   - registrationSuccess : true if just redirected after successful sign‑up
-     */
     @GetMapping("/auth")
     public String showAuthPage(
         Model model,
@@ -79,7 +71,7 @@ public class AuthController {
         BindingResult result,
         Model model
     ) {
-        // If validation errors, re‑show form
+        // If validation errors, reshow form
         if (result.hasErrors()) {
             return showAuthPage(model, false, false);
         }
@@ -109,12 +101,10 @@ public class AuthController {
         userRepository.save(u);
 
         // Redirect with a flag so we can show “Registration successful”
-        return "redirect:/auth?registered";
+        return "redirect:/auth?registered=true";
     }
 
-    /**
-     * Optional: handle logout
-     */
+
     @PostMapping("/logout")
     public String doLogout(HttpSession session) {
         session.invalidate();
